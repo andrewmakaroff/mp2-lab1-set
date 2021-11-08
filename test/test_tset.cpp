@@ -1,6 +1,6 @@
-#include "pch.h"
+//#include "pch.h"
 
-//#include "../gtest/gtest.h"
+#include "../gtest/gtest.h"
 
 
 #include "tset.h"
@@ -298,4 +298,28 @@ TEST(TSet, check_negation_operator)
   expSet.InsElem(2);
 
   EXPECT_EQ(expSet, set1);
+}
+
+TEST(TSet, multiple_sum) {
+	const int size = 6;
+	TSet set(size), set1(size), set2(size), res(size);
+	//set = {0,1}
+	set.InsElem(0);
+	set.InsElem(1);
+	//set1 = {2,3}
+	set.InsElem(2);
+	set.InsElem(3);
+	//set2 = {4,5}
+	set.InsElem(4);
+	set.InsElem(5);
+
+	for (int i = 0; i < size; ++i)
+		res.InsElem(i);
+
+	EXPECT_EQ(res, (set + set1 + set2));
+
+}
+
+TEST(TSet, simple_pause) {
+	system("pause");
 }
