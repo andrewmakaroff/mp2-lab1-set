@@ -1,4 +1,3 @@
-
 // ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
 //
 // tbitfield.cpp - Copyright (c) Гергель В.П. 07.05.2001
@@ -53,7 +52,7 @@ TELEM TBitField::GetMemMask(const int n) const // битовая маска дл
 {
 	if (n < 0 || n > BitLen)
 		std::cout << "Invalid value";
-	else return (1 << (n % (sizeof(TELEM) * 8)));
+	else return 1 << (n) % (sizeof(TELEM) * 8);
 }
 
 // доступ к битам битового поля
@@ -126,19 +125,28 @@ int TBitField::operator!=(const TBitField & bf) const // сравнение
 	else return 1;
 }
 
-TBitField TBitField::operator|(const TBitField & bf) // операция "или"
+TBitField TBitField::operator|(const TBitField& bf) // операция "или"
 {
-	int tmpSize;
-	if (BitLen > bf.BitLen)
+	int tmpSize = 0;
+	int n = 0;
+	if (BitLen >= bf.BitLen)
+	{
 		tmpSize = BitLen;
-	else tmpSize = bf.BitLen;
-
+		n = bf.BitLen;
+	}
+	else
+	{
+		tmpSize = bf.BitLen;
+		n = BitLen;
+	}
 	TBitField tmp(tmpSize);
+	if (tmpSize == BitLen)
+		tmp = *this;
+	else tmp = bf;
 
-	for (int i = 0; i < MemLen; ++i)
-		tmp.pMem[i] = pMem[i];
-	for (int i = 0; i < MemLen; ++i)
-		tmp.pMem[i] = (bf.pMem[i] | pMem[i]);
+	for (int i = 0; i < n; i++)
+		if ((GetBit(i) || bf.GetBit(i)))
+			tmp.SetBit(i);
 	return tmp;
 }
 
@@ -194,7 +202,9 @@ istream& operator>>(istream & istr, TBitField & bf) // ввод
 ostream& operator<<(ostream & ostr, const TBitField & bf) // вывод
 {
 	for (int i = 0; i < bf.GetLength(); ++i)
+	{
 		ostr << bf.GetBit(i);
+	}
 	ostr << '\n';
 	return ostr;
 }
